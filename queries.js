@@ -3,18 +3,17 @@ const db = require('./database-connection')
       listAll(){
           return db('movies')
       },
-      getById(){
-          return db('movies').where(id, 'id')
+      getById(id){
+          return db('movies').where('id', id).first()
       },
-      createMovie(newMovie){
-          return db('movies').insert(newMovie)
-          .returning('*')
+      createMovie(movie){
+          return db('movies').insert(movie).returning('*')
       },
       deleteMovie(id){
           return db('movies').where('id', id).delete()
       },
       updateMovie(id, movie){
-          return db('movie').where('id', id).update(movie).returning('*')
+          return db('movies').where('id', id).update(movie).returning('*')
       }
 
  } 

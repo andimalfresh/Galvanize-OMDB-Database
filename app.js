@@ -13,19 +13,24 @@ app.get('/', (req,res) => {
     queries.listAll().then(movies => res.json(movies))
 })
 app.get('/:id', (req,res) => {
-    queries.listById(req.params.id).then(movies => res.json(movies))
+    queries.getById(req.params.id).then(moviesById => res.json(moviesById))
 })
 app.post('/', (req, res) => {
-    queries.createMovie(req.body).then(movies => res.send(movies))
+    queries.createMovie(req.body).then(newMovie => res.send(newMovie[0]))
 })
 app.delete('/:id', (req,res) => {
-    queries.deleteMovie(req.params.id).delete().then(res.sendStatus(204))
+    queries.deleteMovie(req.params.id).then(res.sendStatus(204))
 })
 app.put('/:id', (req,res) => {
-    queries.updateMovie(req.params.id, req.body).then(movies => res.json(movies))
+    queries.updateMovie(req.params.id, req.body).then(editMovie => res.send(editMovie[0]))
 })
-app.use((err, req, res, next) => {
+app.use((req, res, next) => {
+    res.status(404).json({ error: { message: 'data not found' }})
+})
+ app.use((err, req, res, next) => {
     const status = err.status || 500
     res.status(status).json({ error: err})
 })
+
+
 app.listen(port, console.log(`We are going deep on PORT: ${port}`))
